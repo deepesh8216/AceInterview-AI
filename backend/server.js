@@ -39,6 +39,10 @@ app.use("/api/ai/generate-explanation", protect, generateConceptExplanation);
 // Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
+app.get('/', (req, res) => {
+  res.send('Backend API is running!');
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
