@@ -24,12 +24,16 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Use provided public image URL, or fallback to a default image
+    // For production, use a cloud image host (S3, Imgur, etc.)
+    const finalProfileImageUrl = profileImageUrl || "https://ui-avatars.com/api/?name=" + encodeURIComponent(name);
+
     // Create new user
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      profileImageUrl,
+      profileImageUrl: finalProfileImageUrl,
     });
 
     // Return user data with JWT
