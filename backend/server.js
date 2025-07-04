@@ -1,3 +1,5 @@
+import { Server } from "http";
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -38,5 +40,9 @@ app.use("/api/ai/generate-explanation", protect, generateConceptExplanation);
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
 // Start Server
+if(process.env.NODE_ENV !== "production"){
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default Server;
