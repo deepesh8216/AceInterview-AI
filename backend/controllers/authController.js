@@ -2,9 +2,12 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+// Change this to your deployed backend URL
+const BASE_URL = "https://ace-interview-backend.vercel.app";
+
 // Generate JWT Token
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign({ id: userId }, "your_jwt_secret_here", { expiresIn: "7d" });
 };
 
 // @desc    Register a new user
@@ -12,7 +15,7 @@ const generateToken = (userId) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, profileImageUrl } = req.body;
+    const { name, email, password, profileImage } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -23,6 +26,12 @@ const registerUser = async (req, res) => {
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    // If profileImage was provided, build the correct URL
+    let profileImageUrl = "";
+    if (profileImage) {
+      profileImageUrl = `${BASE_URL}/uploads/${profileImage}`;
+    }
 
     // Create new user
     const user = await User.create({
